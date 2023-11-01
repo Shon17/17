@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея изображений</title>
+    <style>
+        img{
+            width: 500px; height: 300px;
+        }
+        .gallery-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container {
+            display: none;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+        }
+        #mySquare {
+        width: 100px;
+        height: 100px;
+        background-color: cyan;
+        position: absolute;
+        text-align: center;
+      }
+      #mySquare {
+  left: 50%;
+  top: 50%;
+}
+#moving-element {
+  width: 50px;
+  height: 50px;
+  background-color: green;
+  position: absolute;
+}
+#menu ul {
+  display: none;
+  list-style: none;
+  padding: 0;
+}
+
+#menu ul li {
+  padding: 10px;
+  background-color: lightgray;
+}
+
+#menu {
+  width: 150px;
+  position: fixed;
+  top: 800px;
+  left: 650px;
+}
+
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div id="mySquare"></div>
+    <div class="gallery-container">
+        <div class="image-container">
+            <img src="https://projects.voanews.com/ground-zero/images/800x-master-pnp-ppmsca-71300-71335u.jpg" alt="Изображение 1">
+        </div>
+        <div class="image-container">
+            <img src="https://flyingmag.sfo3.digitaloceanspaces.com/flyingma/wp-content/uploads/2022/06/23090933/AdobeStock_249454423-scaled.jpeg" alt="Изображение 2">
+        </div>
+        <div class="image-container">
+            <img src="https://w7.pngwing.com/pngs/109/212/png-transparent-comic-boom.png" alt="Изображение 3">
+        </div>
+        <div class="controls">
+            <button id="prev">Предыдущее</button>
+            <button id="next">Следующее</button>
+        </div>
+    </div>
+    <div id="moving-element"></div>
+    <div id="menu">
+        <button id="show-menu">Показать меню</button>
+        <ul>
+          <li>Пункт меню 1</li>
+          <li>Пункт меню 2</li>
+          <li>Пункт меню 3</li>
+        </ul>
+      </div>
+      
+      <form id="my-form">
+        <input type="text" name="name" placeholder="Ваше имя">
+        <input type="email" name="email" placeholder="Ваш Email">
+        <button type="submit">Отправить</button>
+      </form>
+      <div id="response"></div>
+      
+
+    <script>
+        $(document).ready(function() {
+            var currentImage = 0;
+            var $imageContainers = $('.image-container');
+            var numImages = $imageContainers.length;
+
+            function showImage(index) {
+                $imageContainers.hide();
+                $imageContainers.eq(index).show();
+            }
+
+            showImage(currentImage);
+
+            $('#next').on('click', function() {
+                currentImage = (currentImage + 1) % numImages;
+                showImage(currentImage);
+            });
+
+            $('#prev').on('click', function() {
+                currentImage = (currentImage - 1 + numImages) % numImages;
+                showImage(currentImage);
+            });
+        });
+        $(document).ready(function() {
+          $("#mySquare").mouseenter(function() {
+            $(this).animate({
+                width: '300px',
+                height: '300px',
+                backgroundColor: 'red'
+            });
+            $("#mySquare").mouseleave(function(){
+                $(this).animate({
+                    width: '100px',
+                    height: '100px',
+                    backgroundColor: 'cyan'
+                });
+                $(document).ready(function() {
+  const speed = 5; 
+  
+  function moveElement() {
+    const $element = $('#moving-element');
+    const currentLeft = parseInt($element.css('left'));
+    
+    $element.css('left', currentLeft + speed);
+    
+    if (currentLeft > $(window).width()) {
+      $element.css('left', -50);
+    }
+  }
+  
+  setInterval(moveElement, 1000 / 60); 
+});
+
+
+            });
+          })});
+          $(document).ready(function() {
+  $('#show-menu').click(function() {
+    $('#menu ul').slideToggle();
+  });
+});
+$(document).ready(function() {
+  $('#my-form').submit(function(event) {
+    event.preventDefault();
+    const formData = $(this).serialize();
+    
+    $.ajax({
+      type: 'POST',
+      url: 'example.php', 
+      data: formData,
+      success: function(response) {
+        $('#response').html(response);
+      }
+    });
+  });
+});
+
+          
+    </script>
+</body>
+</html>
